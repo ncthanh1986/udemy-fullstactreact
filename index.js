@@ -5,7 +5,7 @@ const app = express();
 //app is an object
 
 //a route handler
-app.get('/greeting', (req,res) =>{ //this is a Javascript arrow function
+app.get('/', (req,res) =>{ //this is a Javascript arrow function
 	res.send({hi:'there'});
 })
 
