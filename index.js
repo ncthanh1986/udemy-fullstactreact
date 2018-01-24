@@ -1,13 +1,15 @@
 const express = require('express');
+require('./services/passport');
+;
+
 
 //create first express application
 const app = express();
 //app is an object
 
-//a route handler
-app.get('/', (req,res) =>{ //this is a Javascript arrow function
-	res.send({hi:'there'});
-})
+require('./routes/authRoutes')(app);
+//require('./routes/authRoutes') returns a function, we then immediately recall that function with the 'app' object.
+
 
 //tell heroku what version of node and npm to use by adding "engines" to the package.json file
 
