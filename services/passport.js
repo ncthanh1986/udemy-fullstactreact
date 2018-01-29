@@ -1,6 +1,8 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const keys = require('../config/keys')
+const mongoose = require('mongoose');
+const keys = require('../config/keys');
+const User = mongoose.model('users'); //required otherwise error, no model defined. !
 
 // ./: look at the current directory
 // ../: go up one level
@@ -17,10 +19,16 @@ passport.use(
 			callbackURL: '/auth/google/callback'
 		}, 
 		(accessToken, refreshToken, profile, done) => {
-			console.log('access token', accessToken);
-			console.log('refresh token', refreshToken);
-			console.log('profile', profile)
-			console.log('name:',profile.name.familyName)
+			User.findOne({ googleId: profile.id}) //look through the User collection, look for the first one with googleId = profile.id		
+				.then(existingUser => {
+					if (existingUser){
+						// we already have a record with the same googleId, do something
+					} else {
+						// we don't have any record with the same googleId yet, let's create one. 
+						new User({googleId: profile.id}).save();
+					}
+				})
+			
 		}
 	)
 ); 
